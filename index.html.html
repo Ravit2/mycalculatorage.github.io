@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <script defer src="script.js"></script>
+    <title>Age Calculator</title>
+</head>
+<body>
+    <div class="card"></div>
+    <header>
+        <h1>Age Calculator</h1>
+    </header>
+
+    <div>
+        <label for="inputDob">Enter your Date of Birth</label>
+        <input id="inputDob" type="date" value="2000-01-01" />
+    </div>
+    <br />
+
+    <!-- Take the date from which age is to be calculated -->
+    <div>
+        <label for="cdate">Current Date</label>
+        <input id="cdate" type="date" value="" />
+    </div>
+    <br />
+
+    <button type="button" onclick="getDOB()">Calculate Age</button>
+
+    <div id="currentAge"></div>
+
+    <script>
+        function getDOB() {
+            // Getting input from html input element
+            let date = document.getElementById("inputDob").value;
+
+            // Convert inp (method) Date.getDate(): number as day, month, year
+            let dob = new Date(date);
+            let day = dob.getDate();
+            let month = dob.getMonth();
+            let year = dob.getFullYear();
+
+            // Getting current date and calculating the difference
+            let now = new Date(document.getElementById("cdate").value);
+            let yearDiff = now.getFullYear() - year;
+            let monthDiff = now.getMonth() - month;
+            let dateDiff = now.getDate() - day;
+
+            // Calculating the Age
+            if (yearDiff < 0) {
+                console.log("Invalid date");
+            } else if (monthDiff > 0 || (monthDiff === 0 && dateDiff >= 0)) {
+                console.log(yearDiff);
+            } else {
+                yearDiff -= 1;
+                monthDiff = 12 + monthDiff;
+                if (dateDiff < 0) {
+                    monthDiff -= 1;
+                    dateDiff = 30 + dateDiff;
+                }
+            }
+
+            // Show calculated age as output
+            // and invalid if wrong input is given
+            if (yearDiff < 0) {
+                document.getElementById("currentAge").innerHTML = "Invalid Date";
+            } else {
+                document.getElementById("currentAge").innerHTML = `Your current Age is: ${yearDiff} years, ${monthDiff} months, ${dateDiff} days`;
+            }
+        }
+
+        // Function to provide default date value
+        function currentDate() {
+            let d = document.getElementById("cdate");
+            d.value = formatted();
+        }
+
+        function formatted(date = new Date()) {
+            return [
+                date.getFullYear(),
+                short(date.getMonth() + 1),
+                short(date.getDate()),
+            ].join("-");
+        }
+
+        function short(num) {
+            return num.toString().padStart(2, "0");
+        }
+
+        // Calling current date function to set default date value
+        currentDate();
+    </script>
+</body>
+</html>
